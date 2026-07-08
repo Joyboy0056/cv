@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Edoardo Tesei — AI Dev</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,700;1,9..144,500;1,9..144,600&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+
+:root {
+  --paper:    #f7f2ea;
+  --paper-d:  #ede7dc;
+  --ink:      #1c1714;
+  --ink-m:    #5a3e32;
+  --ink-d:    #8a6856;
+  --rust:     #c1502e;
+  --rule:     rgba(28,23,20,0.09);
+  --rule-s:   rgba(28,23,20,0.18);
+  --serif:    'Fraunces', Georgia, serif;
+  --sans:     'Inter', system-ui, sans-serif;
+  --mono:     'JetBrains Mono', monospace;
+}
+
+body { background:var(--paper); color:var(--ink); font-family:var(--sans); font-weight:300; line-height:1.6; }
+a { color:var(--rust); text-decoration:none; }
+a:hover { text-decoration:underline; }
+a:focus-visible { outline:2px solid var(--rust); outline-offset:3px; border-radius:2px; }
+
+.cv { max-width:900px; margin:0 auto; }
+
+/* HERO */
+.hero {
+  padding:4.2rem 2.6rem 3.4rem;
+  border-bottom:1px solid var(--rule-s);
+}
+.eyebrow {
+  font-family:var(--mono);
+  font-size:0.68rem;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  color:var(--rust);
+  margin-bottom:1.4rem;
+}
+.hero-name {
+  font-family:var(--serif);
+  font-weight:700;
+  font-size:clamp(2.8rem,5.5vw,4.4rem);
+  letter-spacing:-0.035em;
+  line-height:1;
+  color:var(--ink);
+  margin-bottom:0.7rem;
+}
+.hero-line {
+  font-family:var(--serif);
+  font-style:italic;
+  font-weight:500;
+  font-size:clamp(1.05rem,2vw,1.35rem);
+  color:var(--ink-m);
+  line-height:1.45;
+  margin-bottom:2.2rem;
+}
+.hero-line em { color:var(--rust); }
+.contacts {
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:0.9rem;
+}
+.contact-link {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:36px;
+  height:36px;
+  border:1px solid var(--rule-s);
+  border-radius:50%;
+  color:var(--ink-d);
+  transition:border-color 0.15s, background 0.15s;
+  position:relative;
+}
+.contact-link svg {
+  width:16px;
+  height:16px;
+  flex-shrink:0;
+  stroke:var(--ink-d);
+  fill:none;
+  stroke-width:1.6;
+  transition:stroke 0.15s;
+}
+.contact-link[data-fill] svg { fill:var(--ink-d); stroke:none; }
+.contact-link:hover { border-color:var(--rust); background:var(--paper-d); text-decoration:none; }
+.contact-link:hover svg { stroke:var(--rust); }
+.contact-link[data-fill]:hover svg { fill:var(--rust); }
+
+.contact-link::after {
+  content:attr(data-label);
+  position:absolute;
+  bottom:-1.65rem;
+  left:50%;
+  transform:translateX(-50%);
+  font-family:var(--mono);
+  font-size:0.6rem;
+  white-space:nowrap;
+  background:var(--ink);
+  color:var(--paper);
+  padding:0.2rem 0.5rem;
+  border-radius:3px;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity 0.15s;
+  z-index:5;
+}
+.contact-link:hover::after { opacity:1; }
+
+/* ACCORDION */
+.accordion { border-bottom:1px solid var(--rule-s); }
+.acc-item { border-top:1px solid var(--rule-s); }
+
+.acc-btn {
+  width:100%;
+  background:none;
+  border:none;
+  cursor:pointer;
+  padding:1.5rem 2.6rem;
+  display:grid;
+  grid-template-columns:2.4rem 1fr auto auto;
+  align-items:center;
+  gap:0 1rem;
+  text-align:left;
+  transition:background 0.15s;
+}
+.acc-btn:hover { background:var(--paper-d); }
+
+.acc-num {
+  font-family:var(--mono);
+  font-size:0.62rem;
+  color:var(--rust);
+  letter-spacing:0.05em;
+  padding-top:0.1rem;
+}
+.acc-title {
+  font-family:var(--serif);
+  font-weight:700;
+  font-size:1.18rem;
+  color:var(--ink);
+  letter-spacing:-0.01em;
+}
+.acc-hint {
+  font-family:var(--mono);
+  font-size:0.62rem;
+  color:var(--ink-d);
+  letter-spacing:0.02em;
+}
+.acc-icon {
+  font-family:var(--mono);
+  font-size:1.1rem;
+  color:var(--rust);
+  line-height:1;
+  width:1rem;
+  text-align:right;
+}
+.acc-icon::before { content:'+'; }
+.acc-item.open .acc-icon::before { content:'x'; }
+
+.acc-body {
+  max-height:0;
+  overflow:hidden;
+  transition:max-height 0.42s cubic-bezier(0.4,0,0.2,1);
+}
+.acc-item.open .acc-body { max-height:4000px; }
+
+.acc-inner { padding:0.2rem 2.6rem 2.6rem; }
+
+/* SECTION: IN PRODUZIONE */
+.prod-intro {
+  font-size:0.83rem;
+  color:var(--ink-m);
+  line-height:1.75;
+  margin-bottom:2rem;
+  max-width:72ch;
+}
+.prod-intro strong { color:var(--ink); font-weight:500; }
+
+.group-label {
+  font-family:var(--mono);
+  font-size:0.6rem;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  color:var(--rust);
+  padding-bottom:0.5rem;
+  border-bottom:1px solid var(--rule-s);
+  margin-bottom:1rem;
+}
+.prod-group { margin-bottom:2rem; }
+.prod-group:last-child { margin-bottom:0; }
+
+.prod-cards {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:0.75rem;
+}
+.prod-card {
+  background:var(--paper-d);
+  border-left:2px solid var(--rust);
+  border-radius:0 4px 4px 0;
+  padding:0.85rem 1rem;
+}
+.prod-name {
+  font-family:var(--mono);
+  font-size:0.7rem;
+  font-weight:500;
+  color:var(--rust);
+  margin-bottom:0.4rem;
+}
+.prod-desc {
+  font-size:0.76rem;
+  color:var(--ink-m);
+  line-height:1.65;
+}
+
+.orch-box {
+  margin-top:1rem;
+  padding:0.85rem 1rem;
+  background:var(--paper-d);
+  border-top:2px solid var(--ink-d);
+  border-radius:0 0 4px 4px;
+}
+.orch-label {
+  font-family:var(--mono);
+  font-size:0.6rem;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  color:var(--ink-d);
+  margin-bottom:0.35rem;
+}
+.orch-desc {
+  font-size:0.76rem;
+  color:var(--ink-m);
+  line-height:1.65;
+}
+
+/* SECTION: STACK */
+.stack-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(195px,1fr));
+  gap:1.5rem 2.2rem;
+}
+.stack-cat {
+  font-family:var(--mono);
+  font-size:0.6rem;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  color:var(--rust);
+  margin-bottom:0.55rem;
+}
+.stack-items {
+  font-size:0.8rem;
+  color:var(--ink-m);
+  line-height:1.85;
+}
+
+/* SECTION: PROJECTS */
+.proj-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:1.5rem 2.4rem;
+}
+.proj-card {
+  padding-top:1rem;
+  border-top:1px solid var(--rule-s);
+}
+.proj-name {
+  font-family:var(--serif);
+  font-style:italic;
+  font-weight:600;
+  font-size:1.05rem;
+  color:var(--ink);
+  margin-bottom:0.15rem;
+  display:flex;
+  align-items:baseline;
+  gap:0.5rem;
+}
+.proj-year {
+  font-family:var(--mono);
+  font-style:normal;
+  font-weight:400;
+  font-size:0.65rem;
+  color:var(--ink-d);
+  letter-spacing:0.02em;
+}
+.proj-tags {
+  font-family:var(--mono);
+  font-size:0.59rem;
+  letter-spacing:0.05em;
+  text-transform:uppercase;
+  color:var(--rust);
+  margin-bottom:0.55rem;
+}
+.proj-desc {
+  font-size:0.78rem;
+  color:var(--ink-m);
+  line-height:1.68;
+}
+.proj-link {
+  display:inline-block;
+  margin-top:0.5rem;
+  font-family:var(--mono);
+  font-size:0.63rem;
+  color:var(--rust);
+}
+
+/* SECTION: BACKGROUND */
+.bg-list { list-style:none; }
+.bg-item {
+  display:grid;
+  grid-template-columns:155px 1fr;
+  gap:0 1.6rem;
+  padding:1.1rem 0;
+  border-bottom:1px solid var(--rule);
+}
+.bg-item:last-child { border-bottom:none; }
+.bg-date {
+  font-family:var(--mono);
+  font-size:0.63rem;
+  color:var(--ink-d);
+  letter-spacing:0.02em;
+  padding-top:0.15rem;
+}
+.bg-role {
+  font-family:var(--serif);
+  font-weight:600;
+  font-size:0.88rem;
+  color:var(--ink);
+  margin-bottom:0.15rem;
+}
+.bg-org {
+  font-size:0.77rem;
+  color:var(--rust);
+  margin-bottom:0.3rem;
+}
+.bg-org .company {
+  font-family:var(--serif);
+  font-style:italic;
+  font-weight:600;
+  letter-spacing:0;
+  color:var(--rust);
+}
+.bg-org .subject {
+  font-family:var(--mono);
+  font-variant:normal;
+  text-transform:uppercase;
+  letter-spacing:0.1em;
+  font-weight:500;
+  color:var(--rust);
+}
+.bg-note {
+  font-size:0.76rem;
+  color:var(--ink-m);
+  line-height:1.65;
+}
+.bg-divider {
+  grid-column:1/-1;
+  font-family:var(--mono);
+  font-size:0.58rem;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  color:var(--ink-d);
+  padding-top:1.4rem;
+  padding-bottom:0.3rem;
+  border-top:1px solid var(--rule-s);
+  margin-top:0.4rem;
+  display:block;
+}
+
+/* FOOTER */
+.footer {
+  background:var(--paper-d);
+  border-top:1px solid var(--rule-s);
+  padding:1.2rem 2.6rem;
+  display:flex;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:0.4rem;
+  font-family:var(--mono);
+  font-size:0.61rem;
+  color:var(--ink-d);
+}
+.footer a { color:var(--ink-d); }
+.footer a:hover { color:var(--rust); text-decoration:none; }
+.footer-btc {
+  display:inline-flex;
+  align-items:center;
+  gap:0.35rem;
+}
+.footer-btc svg.btc-coin {
+  width:15px;
+  height:15px;
+  stroke:none;
+}
+.footer-btc svg.btc-coin circle { fill:var(--rust); }
+.footer-btc svg.btc-coin path { stroke:var(--paper); stroke-width:1.6; }
+.footer-btc a { border-bottom:1px dotted var(--rule-s); }
+.footer-btc a:hover { border-bottom-color:var(--rust); }
+
+.colophon {
+  text-align:center;
+  font-family:var(--mono);
+  font-size:0.56rem;
+  letter-spacing:0.02em;
+  color:var(--ink-d);
+  opacity:0.4;
+  padding:0.6rem 0 0.2rem;
+}
+
+/* RESPONSIVE */
+
+/* Tablet / narrow laptop */
+@media (max-width:900px) {
+  .hero { padding:3.2rem 2rem 2.6rem; }
+  .acc-btn, .acc-inner { padding-left:2rem; padding-right:2rem; }
+  .footer { padding-left:2rem; padding-right:2rem; }
+  .prod-cards, .proj-grid { grid-template-columns:1fr; }
+  .stack-grid { grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:1.3rem 1.6rem; }
+}
+
+/* Mobile */
+@media (max-width:680px) {
+  .hero, .acc-btn, .acc-inner, .footer { padding-left:1.3rem; padding-right:1.3rem; }
+  .hero { padding-top:2.6rem; padding-bottom:2rem; }
+  .acc-btn { grid-template-columns:2rem 1fr auto; padding-top:1.2rem; padding-bottom:1.2rem; }
+  .acc-hint { display:none; }
+  .acc-title { font-size:1.02rem; }
+  .prod-cards, .proj-grid { grid-template-columns:1fr; }
+  .bg-item { grid-template-columns:1fr; gap:0.2rem; padding:0.9rem 0; }
+  .contacts { gap:0.65rem; }
+  .contact-link { width:34px; height:34px; }
+  .footer { flex-direction:column; align-items:flex-start; gap:0.5rem; }
+}
+
+/* Very small phones */
+@media (max-width:400px) {
+  .hero, .acc-btn, .acc-inner, .footer { padding-left:1rem; padding-right:1rem; }
+  .hero-name { font-size:2.3rem; }
+  .stack-grid { grid-template-columns:1fr 1fr; }
+}
+
+@media print {
+  .acc-body { max-height:none !important; }
+  .acc-icon { display:none; }
+  .prod-card, .orch-box, .footer { background:var(--paper-d); }
+}
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});"></script>
+</head>
+<body>
+<div class="cv">
+
+<!-- ===== HERO ===== -->
+<header class="hero">
+  <p class="eyebrow">AI Computer Scientist &middot; Würth &middot; Trento, Italy</p>
+  <h1 class="hero-name">Edoardo Tesei</h1>
+  <p class="hero-line">From <em>pure mathematics</em> to data and computer science.</p>
+  <div class="contacts">
+    <a class="contact-link" href="mailto:tesei.edoardo997@gmail.com" aria-label="Email" data-label="tesei.edoardo997@gmail.com">
+      <svg viewBox="0 0 24 24"><path d="M3 6.5v11a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1v-11m-18 0a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1m-18 0 9 6.5 9-6.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+    <a class="contact-link" href="tel:+393279788878" aria-label="Phone" data-label="+39 327 9788 878">
+      <svg viewBox="0 0 24 24"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.2.2 2.4.6 3.6.1.4 0 .8-.2 1l-2.3 2.2Z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+    <a class="contact-link" href="https://github.com/Joyboy0056" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-label="github.com/Joyboy0056" data-fill>
+      <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.46-1.16-1.11-1.47-1.11-1.47-.9-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.08.63-1.33-2.22-.25-4.56-1.11-4.56-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.5 9.5 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2Z"/></svg>
+    </a>
+    <a class="contact-link" href="https://www.linkedin.com/in/edoardo-tesei-52214014b/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" data-label="linkedin.com/in/edoardo-tesei" data-fill>
+      <svg viewBox="0 0 24 24"><path d="M6.94 8.5H3.56V20h3.38V8.5ZM5.25 3.5a1.96 1.96 0 1 0 0 3.92 1.96 1.96 0 0 0 0-3.92ZM20.44 20h-3.38v-6.02c0-1.44-.03-3.28-2-3.28-2 0-2.31 1.56-2.31 3.18V20H9.37V8.5h3.24v1.57h.05c.45-.85 1.56-1.75 3.21-1.75 3.44 0 4.07 2.26 4.07 5.2V20Z"/></svg>
+    </a>
+    <a class="contact-link" href="https://www.kaggle.com/nikasun" target="_blank" rel="noopener noreferrer" aria-label="Kaggle" data-label="kaggle.com/nikasun">
+      <svg viewBox="0 0 24 24"><path d="M6.5 3.5v17M6.5 12l7-8.5M6.5 12l7.5 8.5M17.5 3.5 11 12l6.5 8.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+  </div>
+</header>
+
+<!-- ===== ACCORDION ===== -->
+<div class="accordion">
+
+  <!-- 01 IN PRODUZIONE -->
+  <div class="acc-item">
+    <button class="acc-btn" aria-expanded="false" onclick="toggleAcc(this)">
+      <span class="acc-num">01</span>
+      <span class="acc-title">In production</span>
+      <span class="acc-hint">Würth &middot; 4 LLM products &middot; 1 Orchestration framework</span>
+      <span class="acc-icon" aria-hidden="true"></span>
+    </button>
+    <div class="acc-body">
+      <div class="acc-inner">
+
+        <p class="prod-intro">
+          I design and maintain four production LLM products on Würth's data infrastructure:
+          two <strong>standalone backend services</strong> on AWS, and two <strong>conversational agents</strong>
+          running on top of <code style="font-family:var(--mono);font-size:0.7rem;">agentsutils</code>, an orchestration
+          framework I built from scratch to handle turns, sessions, a Redis-backed cache, human-in-the-loop
+          interrupts, concurrency, and memory.
+        </p>
+
+        <!-- standalone services -->
+        <div class="prod-group">
+          <p class="group-label">Standalone services &mdash; AWS</p>
+          <div class="prod-cards">
+            <div class="prod-card">
+              <p class="prod-name">Product Engine</p>
+              <p class="prod-desc">
+                A rewrite&ndash;embed&ndash;rerank pipeline that maps natural-language queries to Würth product codes,
+                using fine-tuned <code style="font-family:var(--mono);font-size:0.7rem;">Qwen</code><code style="font-family:var(--mono);font-size:0.7rem;">/Cohere</code> embedding and reranking models behind a stateless HTTP endpoint
+                &mdash; I worked on fine-tuning the embedder. ~100&ndash;200 live users.
+              </p>
+            </div>
+            <div class="prod-card">
+              <p class="prod-name">Transcoding Service</p>
+              <p class="prod-desc">
+                Two-stage pipeline: an LLM <em>extraction</em> module parses unstructured docx, xlsx, pdf and csv files to
+                natural-language product descriptions; a <em>transcode</em> module calls Product Engine via HTTP to map
+                them to product codes. Output: structured Excel. Tested at 20k+ rows in production.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- conversational agents -->
+        <div class="prod-group">
+          <p class="group-label">Conversational agents &mdash; agentsutils</p>
+          <div class="prod-cards">
+            <div class="prod-card">
+              <p class="prod-name">Product Agent</p>
+              <p class="prod-desc">
+                Conversational agent (Rufus-style UX) using Product Engine as its core tool and querying
+                live company databases (Impala, Databricks, Postgres) to answer product questions in natural language.
+                ~50 live users.
+              </p>
+            </div>
+            <div class="prod-card">
+              <p class="prod-name">SQL Agent</p>
+              <p class="prod-desc">
+                General-purpose NL&rarr;SQL agent with plan-and-execute architecture:
+                a <em>discovery</em> module (info-schema queries + SQL knowledge-base RAG on <code style="font-family:var(--mono);font-size:0.7rem;">qdrant</code>) produces a structured plan;
+                an <em>execution</em> module converges to the requested data.
+                Covers Impala and Oracle SQL; packaged as a private GitLab module.
+                ~50 live users.
+              </p>
+            </div>
+          </div>
+          <div class="orch-box">
+            <p class="orch-label">agentsutils &mdash; shared orchestration framework</p>
+            <p class="orch-desc">
+              Private GitLab package used by all conversational-agent repos.
+              Each agent defines its own scaffold and FastAPI harness; <code style="font-family:var(--mono);font-size:0.7rem;">agentsutils</code> owns the runtime:
+              turns, sessions, DB persistence, in-RAM Redis cache, HITL, concurrency,
+              and stateless APIs with short/long-term memory.
+              Right now it backs two agents, and it's built to take on more without touching their code.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- 02 STACK -->
+  <div class="acc-item">
+    <button class="acc-btn" aria-expanded="false" onclick="toggleAcc(this)">
+      <span class="acc-num">02</span>
+      <span class="acc-title">Stack</span>
+      <span class="acc-hint">Python &middot; SQL &middot; LLM APIs &middot; K8s &middot; AWS &middot; CUDA</span>
+      <span class="acc-icon" aria-hidden="true"></span>
+    </button>
+    <div class="acc-body">
+      <div class="acc-inner">
+        <div class="stack-grid">
+          <div>
+            <p class="stack-cat">Agentic AI &amp; LLMs</p>
+            <p class="stack-items">
+              Tool calling &middot; RAG &middot; NL&rarr;SQL<br>
+              Plan-and-Execute &middot; ReAct/ToT<br>
+              OpenAI &middot; Claude &middot; Gemini APIs
+            </p>
+          </div>
+          <div>
+            <p class="stack-cat">Data &amp; backend</p>
+            <p class="stack-items">
+              PL/SQL &middot; Apache Impala &middot; Spark<br>
+              Databricks &middot; PostgreSQL &middot; Oracle<br>
+              Redis &middot; FastAPI &middot; Python
+            </p>
+          </div>
+          <div>
+            <p class="stack-cat">Infrastructure</p>
+            <p class="stack-items">
+              Docker &middot; Kubernetes &middot;<br> 
+              ArgoCD — GitOps<br>
+              CI/CD &middot; Git &middot; CUDA<br>
+              AWS &middot; GCP &middot; Azure
+            </p>
+          </div>
+          <div>
+            <p class="stack-cat">ML &amp; mathematical foundations</p>
+            <p class="stack-items">
+              Optimisation in $\mathbb{R}^N$ ($N$ ~ 10&#x00B9;&#x00B2;)<br>
+              Transformer dynamics &middot; Quantization &middot; Fine-tuning<br>
+              Differential geometry &middot; GR &middot; LQG &middot; LEAN
+            </p>
+          </div>
+          <div>
+            <p class="stack-cat">Languages</p>
+            <p class="stack-items">
+              Italian &mdash; native<br>
+              English &mdash; B2 working proficiency
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 03 PROJECTS -->
+  <div class="acc-item">
+    <button class="acc-btn" aria-expanded="false" onclick="toggleAcc(this)">
+      <span class="acc-num">03</span>
+      <span class="acc-title">Projects</span>
+      <span class="acc-hint">Galileo &middot; mathematician-agent &middot; Riemmpy &middot; Quantum Tetrahedra</span>
+      <span class="acc-icon" aria-hidden="true"></span>
+    </button>
+    <div class="acc-body">
+      <div class="acc-inner">
+        <div class="proj-grid">
+
+          <div class="proj-card">
+            <p class="proj-name">mathematician-agent <span class="proj-year">&middot; 2026</span></p>
+            <p class="proj-tags">Prototype &middot; v0.0.* &middot; Local &middot; SymPy &middot; Lean &middot; RAG</p>
+            <p class="proj-desc">
+              An agent meant to reason with the rigour of an actual mathematician: <code style="font-family:var(--mono);font-size:0.7rem;">SymPy</code> for symbolic
+              computation, <code style="font-family:var(--mono);font-size:0.7rem;">Lean</code> to formally verify lemmas and theorems, plus retrieval over a curated math
+              knowledge base. Meant to run locally as a coding agent, not a web app &mdash; still early in the architecture design.
+            </p>
+            <a class="proj-link" href="https://github.com/Joyboy0056/mathematician-agent" target="_blank" rel="noopener noreferrer">&#8599; github.com/mathematician-agent</a>
+          </div>
+
+          <div class="proj-card">
+            <p class="proj-name">Galileo <span class="proj-year">&middot; 2026</span></p>
+            <p class="proj-tags">NL2SQL &middot; RAG &middot; Geospatial &middot; ESA Sentinel-2 &middot; PostGIS</p>
+            <p class="proj-desc">
+              NL&rarr;SQL and RAG agent for ESA Sentinel-2 geospatial data, built as an application for an ESA Junior Trainee position
+              &mdash; not selected; kept building it anyway. Same plan-and-execute architecture as the SQL Agent at Würth, applied to a PostGIS database
+              with satellite imagery.
+            </p>
+            <a class="proj-link" href="https://github.com/Joyboy0056/esa-sql-project" target="_blank" rel="noopener noreferrer">&#8599; github.com/esa-sql-project</a>
+          </div>
+
+          <div class="proj-card">
+            <p class="proj-name">Riemmpy <span class="proj-year">&middot; 2025</span></p>
+            <p class="proj-tags">Open source &middot; Differential geometry &middot; Python</p>
+            <p class="proj-desc">
+              Symbolic library for computation on Riemannian manifolds &mdash;
+              tensors, connections, curvature operators.
+              Built during unemployed weeks post MSc graduation.
+            </p>
+            <a class="proj-link" href="https://github.com/Joyboy0056/The-Geometric-Project" target="_blank" rel="noopener noreferrer">&#8599; github.com/riemmpy</a>
+          </div>
+
+          <div class="proj-card">
+            <p class="proj-name">Quantum Tetrahedra <span class="proj-year">&middot; 2025</span></p>
+            <p class="proj-tags">Open source &middot; Loop Quantum Gravity &middot; Python</p>
+            <p class="proj-desc">
+              Implementation of quantum geometry objects from loop quantum gravity &mdash;
+              discrete space(time) structures at the quantum level.
+              Built to symbolically cross-check my original MSc thesis result, developed within my supervisor's LQG research group (Turin).
+            </p>
+            <a class="proj-link" href="https://github.com/Joyboy0056/QuantumGeometryOfTetrahedra" target="_blank" rel="noopener noreferrer">&#8599; github.com/QuantumGeometryofTetrahedra</a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 04 BACKGROUND -->
+  <div class="acc-item">
+    <button class="acc-btn" aria-expanded="false" onclick="toggleAcc(this)">
+      <span class="acc-num">04</span>
+      <span class="acc-title">Background</span>
+      <span class="acc-hint">Work &middot; Education</span>
+      <span class="acc-icon" aria-hidden="true"></span>
+    </button>
+    <div class="acc-body">
+      <div class="acc-inner">
+        <ul class="bg-list">
+
+          <li class="bg-item">
+            <span class="bg-divider">Work</span>
+          </li>
+
+          <li class="bg-item">
+            <span class="bg-date">Mar 2025 &mdash; present</span>
+            <div>
+              <p class="bg-role">Data Scientist — AI Developer &middot; Mid Position</p>
+              <p class="bg-org"><a href="https://www.wuerth.it/azienda/lavora-con-noi/airlab/" class="company">Würth s.r.l.</a> &middot; Egna — Neumarkt (BZ)</p>
+              <p class="bg-note">
+                Currently working in a Big Data and AI–driven team, handling data end-
+                to-end—from SQL extractions to building ML models up to developing
+                and deploying Python–based LLM agents from scratch.
+              </p>
+            </div>
+          </li>
+          
+          <li class="bg-item">
+            <span class="bg-date">Oct 2024 &mdash; present</span>
+            <div>
+              <p class="bg-role">Applied Mathematician &middot; Freelance</p>
+              <p class="bg-org"><a href="https://www.outlier.ai" class="company">Outlier AI</a> &middot; Full Remote</p>
+              <p class="bg-note"> 
+                Currently training LLMs in the Reinforcement Learning from Human Feedback (RLHF)
+                phase, via prompt and response rating in maths or physics topics.
+              </p>
+            </div>
+          </li>
+
+          <li class="bg-item">
+            <span class="bg-date">2024 &mdash; 2025</span>
+            <div>
+              <p class="bg-role">Analyst &middot; Junior Position</p>
+              <p class="bg-org"><a href="https://www.finconsgroup.com" class="company">Fincons S.p.A.</a> &middot; Trento</p>
+              <p class="bg-note">
+            I worked as a Business Analyst in a consulting team providing IT & Data
+            solutions to the insurance company Itas.
+             </p>
+            </div>
+          </li>
+
+          <li class="bg-item">
+            <span class="bg-date">May &mdash; Sep 2021</span>
+            <div>
+              <p class="bg-role">Developer &middot; Internship</p>
+              <p class="bg-org"><a href="https://www.accenture.com" class="company">Accenture S.p.A.</a> &middot; Bologna</p>
+              <p class="bg-note">
+                I worked on a team–project developing IT backend & frontend solutions
+                for the insurance company UniSalute by using Pega low code software.
+              </p>
+            </div>
+          </li>
+
+          <li class="bg-item">
+            <span class="bg-divider">Education</span>
+          </li>
+
+          <li class="bg-item">
+            <span class="bg-date">2021 &mdash; 2024</span>
+            <div>
+              <p class="bg-role">Master's Degree</p>
+              <p class="bg-org"><span class="subject">Mathematics</span> &middot; <span class="company">University of Trento</span></p>
+              <p class="bg-note">
+                I got into several advanced areas of geometry, calculus and physics and
+                eventually worked on an <a href="https://github.com/Joyboy0056/A-Mathematical-Introduction-to-LQG-and-Quantum-Geometry/blob/main/A_Mathematical_Introduction_to_LQG_and_Quantum_Geometry.pdf" style="font-style: italic;" target="_blank" rel="noopener noreferrer">original</a> 180-page thesis on Quantum Geometries in Loop Quantum Gravity.
+                Original contribution: extended existing intertwiner-space calculations from $n=2$ to the $n=3$ case,
+                involving 81&times;81 matrices representing geometric observables.
+              </p>
+            </div>
+          </li>
+
+          <li class="bg-item">
+            <span class="bg-date">2017 &mdash; 2021</span>
+            <div>
+              <p class="bg-role">Bachelor's Degree</p>
+              <p class="bg-org"><span class="subject">Mathematics</span> &middot; <span class="company">University of Bologna</span></p>
+              <p class="bg-note">
+                I learnt the fundamentals of general and applied mathematics, by eventually mastering Einstein’s theory of Relativity.
+                Growing parallel interest in data and computer science throughout the degree.
+              </p>
+            </div>
+          </li>
+
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <span>Edoardo Tesei &middot; 14/07/1997</span>
+  <span>
+    <a href="mailto:tesei.edoardo997@gmail.com">tesei.edoardo997@gmail.com</a>
+    &nbsp;&middot;&nbsp;
+    <a href="tel:+393279788878">+39 327 9788 878</a>
+  </span>
+  <span class="footer-btc">
+    <svg viewBox="0 0 24 24" aria-hidden="true" class="btc-coin">
+      <circle cx="12" cy="12" r="10"/>
+      <path d="M9.3 7.2h4.1c1.5 0 2.6.9 2.6 2.3 0 1-.6 1.7-1.4 2 1 .3 1.7 1.1 1.7 2.2 0 1.6-1.2 2.5-2.9 2.5H9.3M10.6 7.2v9.6M13.2 7.2v9.6M9 9.9h4.3M9 14.1h4.6M10.9 5.8v1.4M12.4 5.8v1.4M10.9 16.8v1.4M12.4 16.8v1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <a href="https://blockchair.com/bitcoin/address/37yXKmVywiYMiXrFkRY5JDau2zeVozQyhy" target="_blank" rel="noopener noreferrer">37yXKm&hellip;ozQyhy</a>
+  </span>
+</footer>
+
+<div class="colophon">Made by Sonnet-5 and DeepSeek-v4-flash via OpenCode</div>
+
+</div><!-- .cv -->
+
+<script>
+function toggleAcc(btn) {
+  var item = btn.closest('.acc-item');
+  var open = item.classList.toggle('open');
+  btn.setAttribute('aria-expanded', open);
+}
+</script>
+</body>
+</html>
